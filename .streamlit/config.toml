@@ -9,6 +9,21 @@ gatherUsageStats = false
 
 [server]
 enableXsrfProtection = true
+enableCORS = false
+enableWebsocketCompression = true
+maxUploadSize = 100
+maxMessageSize = 100
 
 [client]
-showErrorDetails = false 
+showErrorDetails = false
+toolbarMode = "minimal"
+
+[runner]
+magicEnabled = false
+installTracer = false
+fixMatplotlib = false
+
+# Performance optimizations
+[global]
+developmentMode = false
+dataFrameSerialization = "arrow" 

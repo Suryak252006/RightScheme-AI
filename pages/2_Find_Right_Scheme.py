@@ -6,6 +6,7 @@ from utils.common import initialize_session_state, display_state_selector, trans
 from utils.logging_utils import logger
 from Python_Files.scheme_agent import process_query, create_scheme_agent
 from Python_Files.translation_utils import translate_to_english
+from utils.performance_utils import get_semantic_matcher, get_scheme_agent, cached_scheme_recommendations, optimize_session_state
 
 st.set_page_config(
     page_title="Find Right Scheme - RightScheme AI",
@@ -194,8 +195,8 @@ st.markdown("""
 if "find_schemes" not in st.session_state:
     st.session_state.find_schemes = {
         "chat_history": [],
-        "scheme_agent": create_scheme_agent(),
-        "scheme_matcher": SemanticSchemeMatcher(),
+        "scheme_agent": None,  # Will be loaded lazily using cached version
+        "scheme_matcher": None,  # Will be loaded lazily using cached version
         "is_first_message": True,
         "current_question": 0,
         "user_responses": {},
@@ -207,8 +208,8 @@ def initialize_questionnaire_state():
     if "find_schemes" not in st.session_state:
         st.session_state.find_schemes = {
             "chat_history": [],
-            "scheme_agent": create_scheme_agent(),
-            "scheme_matcher": SemanticSchemeMatcher(),
+            "scheme_agent": None,  # Will be loaded lazily using cached version
+            "scheme_matcher": None,  # Will be loaded lazily using cached version
             "is_first_message": True,
             "current_question": 0,
             "user_responses": {},
@@ -231,9 +232,9 @@ def initialize_questionnaire_state():
     for key in required_keys:
         if key not in st.session_state.find_schemes:
             if key == "scheme_agent":
-                st.session_state.find_schemes[key] = create_scheme_agent()
+                st.session_state.find_schemes[key] = None  # Lazy load with caching
             elif key == "scheme_matcher":
-                st.session_state.find_schemes[key] = SemanticSchemeMatcher()
+                st.session_state.find_schemes[key] = None  # Lazy load with caching
             elif key == "chat_history":
                 st.session_state.find_schemes[key] = []
             elif key in ["current_question", "is_first_message"]:
@@ -883,9 +884,37 @@ def handle_questionnaire_completion(responses: Dict, state: str):
             # Create user profile
             user_profile = create_user_profile(responses, state)
             
-            # Get scheme recommendations
-            matcher = st.session_state.find_schemes["scheme_matcher"]
-            recommendations = matcher.get_scheme_recommendations(user_profile)
+            # Convert user profile to dict for caching
+            user_profile_dict = {
+                "age": user_profile.age,
+                "gender": user_profile.gender,
+                "category": user_profile.category,
+                "annual_income": user_profile.annual_income,
+                "occupation": user_profile.occupation,
+                "occupation_details": user_profile.occupation_details,
+                "state": user_profile.state,
+                "education_level": user_profile.education_level,
+                "specific_needs": user_profile.specific_needs,
+                "interests": user_profile.interests,
+                "marital_status": user_profile.marital_status
+            }
+            
+            # Get cached recommendations
+            recommendations_data = cached_scheme_recommendations(user_profile_dict)
+            
+            # Convert back to SchemeRecommendation objects
+            recommendations = [
+                SchemeRecommendation(
+                    scheme_name=rec["scheme_name"],
+                    relevance_score=rec["relevance_score"],
+                    benefits=rec["benefits"],
+                    eligibility_requirements=rec["eligibility_requirements"],
+                    eligibility_status=rec["eligibility_status"],
+                    application_process=rec["application_process"],
+                    why_recommended=rec["why_recommended"]
+                )
+                for rec in recommendations_data
+            ]
             
             if not recommendations:
                 st.warning("No matching schemes found. Please try adjusting your responses.")
@@ -1009,8 +1038,17 @@ def main():
                 # Add state context to the query
                 contextualized_query = f"For someone in {st.session_state.user_state}: {english_query}"
                 
-                # Get response
-                response_data = process_query(contextualized_query)
+                # Get response using cached agent
+                if not st.session_state.find_schemes["scheme_agent"]:
+                    st.session_state.find_schemes["scheme_agent"] = get_scheme_agent()
+                
+                # Use the cached agent for processing
+                try:
+                    response = st.session_state.find_schemes["scheme_agent"].invoke({"input": contextualized_query})
+                    response_data = {"response": response["output"]}
+                except Exception as e:
+                    logger.error(f"Error with cached agent: {e}")
+                    response_data = process_query(contextualized_query)  # Fallback
                 
                 # Log follow-up conversation
                 logger.log_conversation(

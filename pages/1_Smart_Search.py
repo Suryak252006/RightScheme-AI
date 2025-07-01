@@ -3,6 +3,7 @@ from utils.common import initialize_session_state, display_state_selector, check
 from Python_Files.scheme_agent import process_query, create_scheme_agent
 from Python_Files.translation_utils import translate_text
 from utils.logging_utils import logger
+from utils.performance_utils import get_scheme_agent, cached_scheme_search, optimize_session_state
 
 st.set_page_config(
     page_title="Smart Search - RightScheme AI",
@@ -311,9 +312,19 @@ def main():
         # Show thinking animation
         thinking_container = display_thinking_animation()
         
-        # Get response
+        # Get response using cached search
         contextualized_query = f"For someone in {st.session_state.user_state}: {prompt}"
-        response_data = process_query(contextualized_query)
+        
+        # Try cached search first
+        try:
+            cached_results = cached_scheme_search(contextualized_query, st.session_state.user_state)
+            if cached_results:
+                response_data = {"response": cached_results[0]["response"]}
+            else:
+                response_data = process_query(contextualized_query)
+        except Exception as e:
+            logger.error(f"Error with cached search: {e}")
+            response_data = process_query(contextualized_query)  # Fallback
         
         # Log the conversation
         logger.log_conversation(
