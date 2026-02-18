@@ -1302,23 +1302,22 @@ body {
 .scheme-accordion-item {
     background: white;
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     overflow: hidden;
     transition: all 0.3s ease;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    box-shadow: var(--shadow-sm);
 }
 
 .scheme-accordion-item:hover {
-    border-color: rgba(49, 130, 206, 0.3);
-    box-shadow: 0 2px 8px rgba(26, 54, 93, 0.08);
+    border-color: var(--primary-lighter);
+    box-shadow: var(--shadow-md);
 }
 
 .scheme-accordion-item.open {
-    border-color: rgba(49, 130, 206, 0.4);
-    box-shadow: 0 4px 16px rgba(26, 54, 93, 0.1);
+    border-color: var(--primary-lighter);
+    box-shadow: 0 4px 20px rgba(26, 54, 93, 0.12);
 }
 
-/* Accordion Header */
 .scheme-accordion-header {
     width: 100%;
     display: flex;
@@ -1334,11 +1333,11 @@ body {
 }
 
 .scheme-accordion-header:hover {
-    background: #f8fafc;
+    background: rgba(26, 54, 93, 0.02);
 }
 
 .scheme-accordion-item.open .scheme-accordion-header {
-    background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
+    background: rgba(26, 54, 93, 0.03);
     border-bottom: 1px solid var(--border);
 }
 
@@ -1354,124 +1353,191 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
     background: rgba(26, 54, 93, 0.06);
     color: var(--primary);
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     flex-shrink: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
 }
 
 .scheme-accordion-item.open .scheme-accordion-icon {
     background: var(--primary);
     color: white;
     transform: rotate(90deg);
-    border-radius: 50%;
 }
 
 .scheme-accordion-name {
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--primary);
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    letter-spacing: -0.01em;
 }
 
-/* Accordion Body */
+.scheme-match-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.scheme-match-badge i {
+    font-size: 0.65rem;
+}
+
+.scheme-match-badge.high {
+    background: rgba(56, 161, 105, 0.1);
+    color: #276749;
+}
+
+.scheme-match-badge.medium {
+    background: rgba(237, 137, 54, 0.1);
+    color: #c05621;
+}
+
+.scheme-match-badge.low {
+    background: rgba(229, 62, 62, 0.1);
+    color: #c53030;
+}
+
+/* ---- Accordion Body ---- */
+
 .scheme-accordion-body {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
-    padding: 0 20px;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+    padding: 0 18px;
 }
 
 .scheme-accordion-item.open .scheme-accordion-body {
     max-height: 3000px;
-    padding: 20px;
+    padding: 16px 18px;
 }
 
-/* Structured Section Cards */
-.scheme-sections {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+/* Kill stray <br> tags that cause uneven spacing */
+.scheme-accordion-body br {
+    display: none;
 }
+
+.scheme-accordion-body .scheme-body-simple {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.65;
+}
+
+.scheme-accordion-body .scheme-body-simple p {
+    margin: 0 0 6px;
+}
+
+/* ---- Structured Sections ---- */
 
 .scheme-section {
-    border-radius: 10px;
-    padding: 14px 16px;
-    border: 1px solid transparent;
+    border-left: 3px solid var(--border);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    background: #fafbfc;
+    padding: 12px 14px;
+    margin-bottom: 10px;
 }
 
+.scheme-section:last-child {
+    margin-bottom: 0;
+}
+
+/* Color-coded section borders */
 .scheme-section--why {
-    background: #eff6ff;
-    border-color: #dbeafe;
+    border-left-color: #ed8936;
+    background: rgba(237, 137, 54, 0.04);
 }
 
 .scheme-section--benefits {
-    background: #ecfdf5;
-    border-color: #d1fae5;
+    border-left-color: #38a169;
+    background: rgba(56, 161, 105, 0.04);
 }
 
 .scheme-section--eligibility {
-    background: #f0fdf4;
-    border-color: #dcfce7;
+    border-left-color: #3182ce;
+    background: rgba(49, 130, 206, 0.04);
 }
 
 .scheme-section--apply {
-    background: #fefce8;
-    border-color: #fef9c3;
+    border-left-color: #805ad5;
+    background: rgba(128, 90, 213, 0.04);
 }
 
-.scheme-section--documents {
-    background: #faf5ff;
-    border-color: #f3e8ff;
-}
-
-.scheme-section--default {
-    background: #f8fafc;
-    border-color: #e2e8f0;
+.scheme-section--info {
+    border-left-color: #718096;
+    background: rgba(113, 128, 150, 0.04);
 }
 
 .scheme-section-header {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+}
+
+.scheme-section-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 0.65rem;
+    flex-shrink: 0;
+}
+
+/* Icon badge colors */
+.scheme-section--why .scheme-section-icon {
+    background: rgba(237, 137, 54, 0.15);
+    color: #c05621;
+}
+
+.scheme-section--benefits .scheme-section-icon {
+    background: rgba(56, 161, 105, 0.15);
+    color: #276749;
+}
+
+.scheme-section--eligibility .scheme-section-icon {
+    background: rgba(49, 130, 206, 0.15);
+    color: #2b6cb0;
+}
+
+.scheme-section--apply .scheme-section-icon {
+    background: rgba(128, 90, 213, 0.15);
+    color: #6b46c1;
+}
+
+.scheme-section--info .scheme-section-icon {
+    background: rgba(113, 128, 150, 0.15);
+    color: #4a5568;
+}
+
+.scheme-section-title {
+    font-size: 0.82rem;
     font-weight: 600;
-    font-size: 0.85rem;
     color: var(--primary);
-    letter-spacing: -0.01em;
+    letter-spacing: 0.01em;
 }
-
-.scheme-section-header i {
-    font-size: 0.9rem;
-    width: 20px;
-    text-align: center;
-}
-
-.scheme-section--why .scheme-section-header i { color: #2563eb; }
-.scheme-section--benefits .scheme-section-header i { color: #059669; }
-.scheme-section--eligibility .scheme-section-header i { color: #16a34a; }
-.scheme-section--apply .scheme-section-header i { color: #ca8a04; }
-.scheme-section--documents .scheme-section-header i { color: #9333ea; }
 
 .scheme-section-content {
-    font-size: 0.86rem;
-    line-height: 1.7;
-    color: #475569;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
 }
 
 .scheme-section-content p {
-    margin: 0 0 6px;
-    color: #475569;
-    font-size: 0.86rem;
-    line-height: 1.7;
+    margin: 0 0 4px;
 }
 
 .scheme-section-content p:last-child {
@@ -1479,71 +1545,123 @@ body {
 }
 
 .scheme-section-content strong {
-    color: #1e293b;
+    color: var(--primary);
     font-weight: 600;
 }
 
 .scheme-section-content ul {
-    padding-left: 0;
-    margin: 4px 0 0;
+    padding-left: 18px;
+    margin: 4px 0 2px;
     list-style: none;
 }
 
 .scheme-section-content li {
     position: relative;
-    padding-left: 16px;
-    margin-bottom: 4px;
-    line-height: 1.65;
-    color: #475569;
-    font-size: 0.85rem;
+    padding-left: 4px;
+    margin-bottom: 3px;
+    line-height: 1.55;
+    font-size: 0.84rem;
 }
 
 .scheme-section-content li::before {
     content: '';
     position: absolute;
-    left: 0;
-    top: 9px;
+    left: -14px;
+    top: 8px;
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: currentColor;
-    opacity: 0.4;
+}
+
+/* Per-section bullet colors */
+.scheme-section--why .scheme-section-content li::before {
+    background: #ed8936;
+}
+
+.scheme-section--benefits .scheme-section-content li::before {
+    background: #38a169;
 }
 
 .scheme-section--eligibility .scheme-section-content li::before {
-    display: none;
+    background: #3182ce;
+}
+
+.scheme-section--apply .scheme-section-content li::before {
+    background: #805ad5;
+}
+
+.scheme-section--info .scheme-section-content li::before {
+    background: #718096;
 }
 
 .scheme-section-content a {
-    color: #2563eb;
-    text-decoration: none;
-    border-bottom: 1px dashed #93c5fd;
+    color: var(--primary-light);
+    text-decoration: underline;
     word-break: break-all;
-    transition: border-color 0.2s;
 }
 
 .scheme-section-content a:hover {
-    border-bottom-style: solid;
-    border-color: #2563eb;
+    color: var(--primary);
 }
 
-/* Accordion in chat messages */
+/* Fallback: old-style body content */
+.scheme-accordion-body h2,
+.scheme-accordion-body h3 {
+    color: var(--primary);
+    margin: 10px 0 4px;
+    font-size: 0.95rem;
+}
+
+.scheme-accordion-body p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 4px;
+    font-size: 0.88rem;
+}
+
+.scheme-accordion-body strong {
+    color: var(--primary);
+}
+
+.scheme-accordion-body ul {
+    padding-left: 18px;
+    margin: 4px 0;
+}
+
+.scheme-accordion-body li {
+    margin-bottom: 3px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.scheme-accordion-body a {
+    color: var(--primary-light);
+    text-decoration: underline;
+    word-break: break-all;
+}
+
+.scheme-accordion-body a:hover {
+    color: var(--primary);
+}
+
+/* ---- Accordion inside chat messages ---- */
+
 .message-content .scheme-accordion {
     margin-top: 8px;
-    gap: 8px;
 }
 
 .message-content .scheme-accordion-item {
-    background: rgba(255,255,255,0.8);
+    background: rgba(255, 255, 255, 0.6);
     border-color: rgba(26, 54, 93, 0.1);
 }
 
 .message-content .scheme-accordion-header {
-    padding: 11px 14px;
+    padding: 12px 14px;
 }
 
 .message-content .scheme-accordion-name {
-    font-size: 0.84rem;
+    font-size: 0.85rem;
 }
 
 .message-content .scheme-accordion-item.open .scheme-accordion-body {
@@ -1552,16 +1670,18 @@ body {
 
 .message-content .scheme-section {
     padding: 10px 12px;
+    margin-bottom: 8px;
 }
 
-.message-content .scheme-section-header {
-    font-size: 0.8rem;
-    margin-bottom: 6px;
+.message-content .scheme-section-title {
+    font-size: 0.78rem;
 }
 
 .message-content .scheme-section-content {
     font-size: 0.82rem;
 }
+
+/* ---- Responsive ---- */
 
 @media (max-width: 768px) {
     .scheme-accordion-header {
@@ -1569,21 +1689,29 @@ body {
     }
 
     .scheme-accordion-name {
-        font-size: 0.84rem;
+        font-size: 0.85rem;
+    }
+
+    .scheme-match-badge {
+        font-size: 0.65rem;
+        padding: 3px 8px;
     }
 
     .scheme-accordion-item.open .scheme-accordion-body {
-        padding: 14px;
-    }
-
-    .scheme-section {
         padding: 12px 14px;
     }
 
-    .scheme-section-header {
-        font-size: 0.8rem;
+    .scheme-section {
+        padding: 10px 12px;
     }
 
+    .scheme-section-title {
+        font-size: 0.78rem;
+    }
+
+    .scheme-section-content {
+        font-size: 0.82rem;
+    }
 }
 
 /* Scrollbar styling */
