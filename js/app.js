@@ -180,13 +180,10 @@ For EACH scheme, you MUST use EXACTLY this format:
 • 2. [Step 2]
 • 3. [Step 3]
 
-**Match Score: [X]%**
-
 ---
 
 IMPORTANT RULES:
 - List at least 8-10 relevant schemes
-- Calculate a realistic Match Score (0-100%) based on how well the user profile matches the scheme eligibility
 - Use ✅ for criteria the user meets and ❌ for criteria they don't meet
 - Focus on schemes that are currently active
 - Include official website/portal links where available`;
@@ -279,8 +276,6 @@ When recommending schemes, use this format for EACH scheme:
 • 1. [Step 1]
 • 2. [Step 2]
 • 3. [Step 3]
-
-**Match Score: [X]%**
 
 Use ✅ for met criteria and ❌ for unmet. Include official portal links where available. For general questions, respond conversationally without the template.`;
 
@@ -392,13 +387,15 @@ async function callBackendAPI(messages, maxTokens = 3000) {
 // ========================================
 
 function formatResponse(text) {
-    // Convert markdown-like text to HTML
     let html = text;
 
-    // Escape HTML first (but preserve our formatting)
+    // Remove horizontal rules
+    html = html.replace(/^---+$/gm, '');
+
+    // Escape HTML
     html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-    // Links: [text](url) — must come before bold/italic processing
+    // Links: [text](url)
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
 
     // Headers
@@ -419,19 +416,24 @@ function formatResponse(text) {
     // Wrap consecutive <li> in <ul>
     html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
 
-    // Line breaks (double newline = paragraph)
-    html = html.replace(/\n\n/g, '</p><p>');
+    // Paragraphs
+    html = html.replace(/\n\n+/g, '</p><p>');
     html = html.replace(/\n/g, '<br>');
-
-    // Wrap in paragraph
     html = '<p>' + html + '</p>';
 
-    // Clean up empty paragraphs
+    // Cleanup stray tags
     html = html.replace(/<p>\s*<\/p>/g, '');
     html = html.replace(/<p>\s*(<h[1-3]>)/g, '$1');
     html = html.replace(/(<\/h[1-3]>)\s*<\/p>/g, '$1');
     html = html.replace(/<p>\s*(<ul>)/g, '$1');
     html = html.replace(/(<\/ul>)\s*<\/p>/g, '$1');
+    html = html.replace(/<br>\s*<br>/g, '<br>');
+    html = html.replace(/(<\/h[1-3]>)<br>/g, '$1');
+    html = html.replace(/<br>(<h[1-3]>)/g, '$1');
+    html = html.replace(/<br>(<ul>)/g, '$1');
+    html = html.replace(/(<\/ul>)<br>/g, '$1');
+    html = html.replace(/<p><br>/g, '<p>');
+    html = html.replace(/<br><\/p>/g, '</p>');
 
     return html;
 }
@@ -441,10 +443,10 @@ function formatResponse(text) {
 // ========================================
 
 function buildSchemeAccordion(content) {
-    // Split by scheme sections (## 🏛️ or --- separators)
+    // Split by scheme sections (## 🏛️ or ## numbered)
     const sections = content.split(/(?=##\s*🏛️)|(?=##\s*\d+\.)/).filter(s => s.trim());
 
-    // If we can't parse sections, fall back to formatted response
+    // If we can't parse sections, fall back
     if (sections.length <= 1 && !content.includes('🏛️')) {
         return formatResponse(content);
     }
@@ -456,20 +458,20 @@ function buildSchemeAccordion(content) {
         const trimmed = section.trim();
         if (!trimmed) return;
 
-        // Extract scheme name from ## heading
         const nameMatch = trimmed.match(/^##\s*(?:🏛️\s*)?(.+?)$/m);
         if (!nameMatch) {
-            // Non-scheme content (intro text, etc.)
             accordionHTML += formatResponse(trimmed);
             return;
         }
 
         const schemeName = nameMatch[1].replace(/\*\*/g, '').trim();
-        const schemeBody = trimmed.replace(/^##\s*.+$/m, '').trim();
+        let schemeBody = trimmed.replace(/^##\s*.+$/m, '').trim();
 
-        // Extract match score if present
-        const scoreMatch = schemeBody.match(/Match Score:\s*(\d+)%/i);
-        const score = scoreMatch ? parseInt(scoreMatch[1]) : null;
+        // Remove --- separators
+        schemeBody = schemeBody.replace(/^---+$/gm, '').trim();
+
+        // Parse into structured sections
+        const bodyHTML = parseSchemeBody(schemeBody);
 
         const id = `scheme-${schemeIndex++}`;
 
@@ -480,10 +482,9 @@ function buildSchemeAccordion(content) {
                         <span class="scheme-accordion-icon"><i class="fas fa-chevron-right"></i></span>
                         <span class="scheme-accordion-name">${escapeHtml(schemeName)}</span>
                     </div>
-                    ${score !== null ? `<span class="scheme-match-badge ${score >= 80 ? 'high' : score >= 50 ? 'medium' : 'low'}">${score}% Match</span>` : ''}
                 </button>
                 <div class="scheme-accordion-body">
-                    ${formatResponse(schemeBody)}
+                    ${bodyHTML}
                 </div>
             </div>
         `;
@@ -493,14 +494,63 @@ function buildSchemeAccordion(content) {
     return accordionHTML;
 }
 
+function parseSchemeBody(body) {
+    const sectionMap = [
+        { emoji: '💡', label: 'Why This Scheme', icon: 'fa-lightbulb', cls: 'why' },
+        { emoji: '📋', label: 'Key Benefits', icon: 'fa-gift', cls: 'benefits' },
+        { emoji: '✅', label: 'Eligibility Status', icon: 'fa-clipboard-check', cls: 'eligibility' },
+        { emoji: '📝', label: 'How to Apply', icon: 'fa-pen-to-square', cls: 'apply' },
+        { emoji: '📄', label: 'Required Documents', icon: 'fa-file-lines', cls: 'documents' },
+    ];
+
+    const sectionRegex = /(💡|📋|✅|📝|📄)\s*\*\*([^*]+)\*\*/g;
+    const matches = [];
+    let match;
+
+    // Collect all section positions
+    while ((match = sectionRegex.exec(body)) !== null) {
+        matches.push({ index: match.index, length: match[0].length, emoji: match[1], title: match[2].trim() });
+    }
+
+    // If no sections found, fall back
+    if (matches.length === 0) {
+        return formatResponse(body);
+    }
+
+    let html = '<div class="scheme-sections">';
+
+    // Text before first section
+    if (matches[0].index > 0) {
+        const before = body.substring(0, matches[0].index).trim();
+        if (before) html += formatResponse(before);
+    }
+
+    matches.forEach((m, i) => {
+        const sectionInfo = sectionMap.find(s => s.emoji === m.emoji) || { icon: 'fa-circle-info', cls: 'default' };
+        const contentStart = m.index + m.length;
+        const contentEnd = i < matches.length - 1 ? matches[i + 1].index : body.length;
+        const sectionContent = body.substring(contentStart, contentEnd).trim();
+
+        html += `
+            <div class="scheme-section scheme-section--${sectionInfo.cls}">
+                <div class="scheme-section-header">
+                    <i class="fas ${sectionInfo.icon}"></i>
+                    <span>${escapeHtml(m.title)}</span>
+                </div>
+                <div class="scheme-section-content">
+                    ${formatResponse(sectionContent)}
+                </div>
+            </div>
+        `;
+    });
+
+    html += '</div>';
+    return html;
+}
+
 function toggleSchemeAccordion(id) {
     const item = document.getElementById(id);
-    const isOpen = item.classList.contains('open');
-
-    // Close all others (optional: remove this loop to allow multiple open)
-    // document.querySelectorAll('.scheme-accordion-item.open').forEach(el => el.classList.remove('open'));
-
-    item.classList.toggle('open', !isOpen);
+    item.classList.toggle('open');
 }
 
 function escapeHtml(text) {
