@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RightScheme AI - Scheme Selector</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="app-body">
+    <!-- Navigation -->
+    <nav class="app-nav">
+        <div class="nav-logo" onclick="window.location.href='index.html'" style="cursor:pointer;">
+            <i class="fas fa-shield-halved"></i>
+            <span>RightScheme AI</span>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="selector" onclick="switchTab('selector')">
+                <i class="fas fa-sliders"></i> Scheme Selector
+            </button>
+            <button class="nav-tab" data-tab="search" onclick="switchTab('search')">
+                <i class="fas fa-comments"></i> Smart Search
+            </button>
+        </div>
+    </nav>
+
+    <!-- Scheme Selector Tab -->
+    <main class="main-content">
+        <div id="selectorTab" class="tab-content active">
+            <div class="selector-container">
+                <div class="selector-header">
+                    <h1><i class="fas fa-user-check"></i> Find Your Schemes</h1>
+                    <p>Fill in your details to discover government schemes tailored for you</p>
+                </div>
+
+                <form id="schemeForm" class="scheme-form">
+                    <!-- Step 1: Basic Info -->
+                    <div class="form-step active" data-step="1">
+                        <h2 class="step-heading"><span class="step-badge">1</span> Basic Information</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="state"><i class="fas fa-map-marker-alt"></i> State</label>
+                                <select id="state" name="state" required>
+                                    <option value="">Select your state</option>
+                                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                    <option value="Assam">Assam</option>
+                                    <option value="Bihar">Bihar</option>
+                                    <option value="Chhattisgarh">Chhattisgarh</option>
+                                    <option value="Goa">Goa</option>
+                                    <option value="Gujarat">Gujarat</option>
+                                    <option value="Haryana">Haryana</option>
+                                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                    <option value="Jharkhand">Jharkhand</option>
+                                    <option value="Karnataka">Karnataka</option>
+                                    <option value="Kerala">Kerala</option>
+                                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                    <option value="Maharashtra">Maharashtra</option>
+                                    <option value="Manipur">Manipur</option>
+                                    <option value="Meghalaya">Meghalaya</option>
+                                    <option value="Mizoram">Mizoram</option>
+                                    <option value="Nagaland">Nagaland</option>
+                                    <option value="Odisha">Odisha</option>
+                                    <option value="Punjab">Punjab</option>
+                                    <option value="Rajasthan">Rajasthan</option>
+                                    <option value="Sikkim">Sikkim</option>
+                                    <option value="Tamil Nadu">Tamil Nadu</option>
+                                    <option value="Telangana">Telangana</option>
+                                    <option value="Tripura">Tripura</option>
+                                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                    <option value="Uttarakhand">Uttarakhand</option>
+                                    <option value="West Bengal">West Bengal</option>
+                                    <option value="Delhi">Delhi</option>
+                                    <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+                                    <option value="Ladakh">Ladakh</option>
+                                    <option value="Puducherry">Puducherry</option>
+                                    <option value="Chandigarh">Chandigarh</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="language"><i class="fas fa-language"></i> Preferred Language</label>
+                                <select id="language" name="language" required>
+                                    <option value="">Select language</option>
+                                    <option value="English" selected>English</option>
+                                    <option value="Hindi">Hindi</option>
+                                    <option value="Telugu">Telugu</option>
+                                    <option value="Tamil">Tamil</option>
+                                    <option value="Kannada">Kannada</option>
+                                    <option value="Malayalam">Malayalam</option>
+                                    <option value="Bengali">Bengali</option>
+                                    <option value="Marathi">Marathi</option>
+                                    <option value="Gujarati">Gujarati</option>
+                                    <option value="Punjabi">Punjabi</option>
+                                    <option value="Odia">Odia</option>
+                                    <option value="Urdu">Urdu</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="age"><i class="fas fa-calendar"></i> Age</label>
+                                <input type="number" id="age" name="age" placeholder="Enter your age" min="1" max="120" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender"><i class="fas fa-venus-mars"></i> Gender</label>
+                                <select id="gender" name="gender" required>
+                                    <option value="">Select gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-next" onclick="nextStep(1)">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Category & Income -->
+                    <div class="form-step" data-step="2">
+                        <h2 class="step-heading"><span class="step-badge">2</span> Category & Income</h2>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label><i class="fas fa-user-tag"></i> Which category best describes you?</label>
+                                <div class="radio-grid">
+                                    <label class="radio-card">
+                                        <input type="radio" name="category" value="Student" required>
+                                        <div class="radio-card-content">
+                                            <i class="fas fa-graduation-cap"></i>
+                                            <span>Student</span>
+                                        </div>
+                                    </label>
+                                    <label class="radio-card">
+                                        <input type="radio" name="category" value="Employed">
+                                        <div class="radio-card-content">
+                                            <i class="fas fa-briefcase"></i>
+                                            <span>Employed</span>
+                                        </div>
+                                    </label>
+                                    <label class="radio-card">
+                                        <input type="radio" name="category" value="Self-employed/Business">
+                                        <div class="radio-card-content">
+                                            <i class="fas fa-store"></i>
+                                            <span>Self-employed / Business</span>
+                                        </div>
+                                    </label>
+                                    <label class="radio-card">
+                                        <input type="radio" name="category" value="Unemployed">
+                                        <div class="radio-card-content">
+                                            <i class="fas fa-user-clock"></i>
+                                            <span>Unemployed</span>
+                                        </div>
+                                    </label>
+                                    <label class="radio-card">
+                                        <input type="radio" name="category" value="Senior Citizen">
+                                        <div class="radio-card-content">
+                                            <i class="fas fa-person-cane"></i>
+                                            <span>Senior Citizen</span>
+                                        </div>
+                                    </label>
+                                    <label class="radio-card">
+                                        <input type="radio" name="category" value="Farmer/Agricultural Worker">
+                                        <div class="radio-card-content">
+                                            <i class="fas fa-seedling"></i>
+                                            <span>Farmer / Agricultural Worker</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-users"></i> Social Category</label>
+                                <select id="socialCategory" name="socialCategory" required>
+                                    <option value="">Select social category</option>
+                                    <option value="OC (General)">OC (General)</option>
+                                    <option value="BC (Backward Class)">BC (Backward Class)</option>
+                                    <option value="SC (Scheduled Caste)">SC (Scheduled Caste)</option>
+                                    <option value="ST (Scheduled Tribe)">ST (Scheduled Tribe)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="income"><i class="fas fa-indian-rupee-sign"></i> Annual Household Income (INR)</label>
+                                <select id="income" name="income" required>
+                                    <option value="">Select income range</option>
+                                    <option value="Below 1 Lakh">Below ₹1,00,000</option>
+                                    <option value="1 - 2.5 Lakhs">₹1,00,000 - ₹2,50,000</option>
+                                    <option value="2.5 - 5 Lakhs">₹2,50,000 - ₹5,00,000</option>
+                                    <option value="5 - 8 Lakhs">₹5,00,000 - ₹8,00,000</option>
+                                    <option value="8 - 10 Lakhs">₹8,00,000 - ₹10,00,000</option>
+                                    <option value="Above 10 Lakhs">Above ₹10,00,000</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-prev" onclick="prevStep(2)">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="button" class="btn-next" onclick="nextStep(2)">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Work & Support -->
+                    <div class="form-step" data-step="3">
+                        <h2 class="step-heading"><span class="step-badge">3</span> Work & Support Needs</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label><i class="fas fa-building"></i> Which sector do you work in?</label>
+                                <select id="sector" name="sector">
+                                    <option value="">Select sector</option>
+                                    <option value="Government">Government</option>
+                                    <option value="Private">Private</option>
+                                    <option value="Not Applicable">Not Applicable</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-wheelchair"></i> Do you have any disabilities?</label>
+                                <select id="disability" name="disability" required>
+                                    <option value="">Select</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label><i class="fas fa-hand-holding-heart"></i> What specific support are you looking for?</label>
+                                <div class="checkbox-grid">
+                                    <label class="checkbox-card">
+                                        <input type="checkbox" name="support" value="Housing">
+                                        <div class="checkbox-card-content">
+                                            <i class="fas fa-house"></i>
+                                            <span>Housing</span>
+                                        </div>
+                                    </label>
+                                    <label class="checkbox-card">
+                                        <input type="checkbox" name="support" value="Skill Enhancement">
+                                        <div class="checkbox-card-content">
+                                            <i class="fas fa-book-open"></i>
+                                            <span>Skill Enhancement</span>
+                                        </div>
+                                    </label>
+                                    <label class="checkbox-card">
+                                        <input type="checkbox" name="support" value="Business Loan">
+                                        <div class="checkbox-card-content">
+                                            <i class="fas fa-hand-holding-dollar"></i>
+                                            <span>Business Loan</span>
+                                        </div>
+                                    </label>
+                                    <label class="checkbox-card">
+                                        <input type="checkbox" name="support" value="Personal Loan">
+                                        <div class="checkbox-card-content">
+                                            <i class="fas fa-wallet"></i>
+                                            <span>Personal Loan</span>
+                                        </div>
+                                    </label>
+                                    <label class="checkbox-card">
+                                        <input type="checkbox" name="support" value="Education/Scholarship">
+                                        <div class="checkbox-card-content">
+                                            <i class="fas fa-graduation-cap"></i>
+                                            <span>Education / Scholarship</span>
+                                        </div>
+                                    </label>
+                                    <label class="checkbox-card">
+                                        <input type="checkbox" name="support" value="Healthcare">
+                                        <div class="checkbox-card-content">
+                                            <i class="fas fa-heart-pulse"></i>
+                                            <span>Healthcare</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-prev" onclick="prevStep(3)">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-search"></i> Find My Schemes
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Progress Bar -->
+                <div class="progress-bar-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 33%"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <span class="progress-step active">1</span>
+                        <span class="progress-step">2</span>
+                        <span class="progress-step">3</span>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div id="selectorResults" class="results-section" style="display: none;">
+                    <div class="results-header">
+                        <h2><i class="fas fa-clipboard-list"></i> Recommended Schemes</h2>
+                        <button class="btn-back" onclick="resetForm()">
+                            <i class="fas fa-rotate-left"></i> Search Again
+                        </button>
+                    </div>
+                    <div id="selectorResultsContent" class="results-content">
+                        <!-- Results will be placed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Smart Search Tab -->
+        <div id="searchTab" class="tab-content">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-header-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div>
+                        <h1><i class="fas fa-magnifying-glass"></i> Smart Search</h1>
+                        <p>Ask me anything about Indian Government Schemes!</p>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot-message">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>👋 Welcome! I'll help you find government schemes available in your state and central schemes that you can benefit from.</p>
+                            <p>You can ask me about:</p>
+                            <ul>
+                                <li>Available schemes in your state</li>
+                                <li>Eligibility criteria</li>
+                                <li>Application process</li>
+                                <li>Required documents</li>
+                                <li>Benefits and features</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <input type="text" id="chatInput" placeholder="Type your question here..." 
+                               onkeypress="if(event.key==='Enter') sendMessage()">
+                        <button class="chat-send-btn" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <div class="quick-questions">
+                        <button class="quick-q-btn" onclick="askQuickQuestion('What schemes are available for students in my state?')">
+                            🎓 Student Schemes
+                        </button>
+                        <button class="quick-q-btn" onclick="askQuickQuestion('What housing schemes are available for low income families?')">
+                            🏠 Housing Schemes
+                        </button>
+                        <button class="quick-q-btn" onclick="askQuickQuestion('What are the latest central government schemes?')">
+                            🏛️ Central Schemes
+                        </button>
+                        <button class="quick-q-btn" onclick="askQuickQuestion('What schemes are available for farmers?')">
+                            🌾 Farmer Schemes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Searching for the best schemes for you...</p>
+            <span class="loading-sub">Our AI is analyzing thousands of government schemes</span>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

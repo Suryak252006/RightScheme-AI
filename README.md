@@ -1,40 +1,34 @@
-# rightscheme-streamlit
+# RightScheme AI
 
-A Streamlit application for finding and comparing the right scheme for your needs using semantic search and AI-powered recommendations.
+AI-powered platform to discover Indian Government Schemes tailored for you.
+
+## Setup
+
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Add your Groq API key to `.env`:
+   ```
+   GROQ_API_KEY=your-groq-api-key-here
+   ```
+   Get a free key at [console.groq.com/keys](https://console.groq.com/keys)
+
+3. Start the server:
+   ```bash
+   npm start
+   ```
+
+4. Open `http://localhost:3000` in your browser.
 
 ## Features
+- Interactive lock-based landing page
+- Multi-step Scheme Selector form
+- AI-powered Smart Search chat
+- Multi-language support
 
-- **Semantic Search**: Search through schemes using natural language queries
-- **Find Right Scheme**: Get AI-powered recommendations for schemes based on your requirements
-- **Compare Schemes**: Compare different schemes side by side
-
-## Prerequisites
-
-- Python 3.8 or higher
-- pip (Python package installer)
-
-## Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/rightscheme-streamlit.git
-   cd rightscheme-streamlit   ```
-
-2. Create a virtual environment (recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows, use: venv\Scripts\activate   ```
-
-3. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt   ```
-
-4. Set up environment variables:
-   Create a `.env` file in the root directory with the following variables:
-   ```plaintext
-   OPENAI_API_KEY=your_openai_api_key_here   ```
-
-## Running the Application
-
-To run the application, use the following command:
-wait...
+## Tech Stack
+- Frontend: HTML, CSS, JavaScript
+- Backend: Node.js + Express
+- AI: Groq (Llama 3.3 70B)
