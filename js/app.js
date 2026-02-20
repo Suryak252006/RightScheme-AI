@@ -9,6 +9,7 @@ const API_URL = '/api/chat';  // Backend proxy (API key stays in .env)
 let currentStep = 1;
 const totalSteps = 3;
 let chatHistory = [];
+let schemeIdCounter = 0;  // Global counter for unique accordion IDs
 
 // ---- Initialization ----
 document.addEventListener('DOMContentLoaded', () => {
@@ -179,17 +180,15 @@ For EACH scheme, you MUST use EXACTLY this format:
 • 1. [Step 1]
 • 2. [Step 2]
 • 3. [Step 3]
-
-**Match Score: [X]%**
+• 🔗 Official Website: [portal name](https://actual-scheme-url.gov.in)
 
 ---
 
 IMPORTANT RULES:
 - List at least 8-10 relevant schemes
-- Calculate a realistic Match Score (0-100%) based on how well the user profile matches the scheme eligibility
 - Use ✅ for criteria the user meets and ❌ for criteria they don't meet
 - Focus on schemes that are currently active
-- Include official website/portal links where available`;
+- You MUST include the official government website/portal link for EACH scheme in the How to Apply section. Use the actual .gov.in or .nic.in URL where the user can apply or learn more.`;
 }
 
 // ========================================
@@ -279,10 +278,10 @@ When recommending schemes, use this format for EACH scheme:
 • 1. [Step 1]
 • 2. [Step 2]
 • 3. [Step 3]
+• 🔗 Official Website: [portal name](https://actual-scheme-url.gov.in)
 
-**Match Score: [X]%**
-
-Use ✅ for met criteria and ❌ for unmet. Include official portal links where available. For general questions, respond conversationally without the template.`;
+IMPORTANT: You MUST include the official government website/portal link (.gov.in or .nic.in) for EACH scheme in the How to Apply section.
+Use ✅ for met criteria and ❌ for unmet. For general questions, respond conversationally without the template.`;
 
         const messages = [
             { role: 'system', content: systemPrompt },
@@ -458,7 +457,6 @@ function buildSchemeAccordion(content) {
     }
 
     let accordionHTML = '<div class="scheme-accordion">';
-    let schemeIndex = 0;
 
     sections.forEach(section => {
         const trimmed = section.trim();
@@ -477,24 +475,18 @@ function buildSchemeAccordion(content) {
         // Clean separators
         schemeBody = schemeBody.replace(/^---+/gm, '').replace(/---+$/gm, '').trim();
 
-        // Extract and remove match score from body
-        const scoreMatch = schemeBody.match(/\*?\*?Match Score:\s*(\d+)%\*?\*?/i);
-        const score = scoreMatch ? parseInt(scoreMatch[1]) : null;
-        schemeBody = schemeBody.replace(/\*?\*?Match Score:\s*\d+%\*?\*?/gi, '').trim();
-
         // Parse body into structured sections
         const bodyHTML = parseSchemeBody(schemeBody);
 
-        const id = `scheme-${schemeIndex++}`;
+        const id = `scheme-${schemeIdCounter++}`;
 
         accordionHTML += `
             <div class="scheme-accordion-item" id="${id}">
-                <button class="scheme-accordion-header" onclick="toggleSchemeAccordion('${id}')">
+                <button class="scheme-accordion-header" onclick="toggleSchemeAccordion(this)">
                     <div class="scheme-accordion-title">
                         <span class="scheme-accordion-icon"><i class="fas fa-chevron-right"></i></span>
                         <span class="scheme-accordion-name">${escapeHtml(schemeName)}</span>
                     </div>
-                    ${score !== null ? `<span class="scheme-match-badge ${score >= 80 ? 'high' : score >= 50 ? 'medium' : 'low'}"><i class="fas fa-chart-line"></i> ${score}%</span>` : ''}
                 </button>
                 <div class="scheme-accordion-body">
                     ${bodyHTML}
@@ -549,7 +541,7 @@ function parseSchemeBody(body) {
         const meta = sectionMeta[m.emoji] || { icon: 'fa-info-circle', cls: 'info' };
 
         html += `
-            <div class="scheme-section scheme-section--${meta.cls}">
+            <div class="schem3e-section scheme-section--${meta.cls}">
                 <div class="scheme-section-header">
                     <span class="scheme-section-icon"><i class="fas ${meta.icon}"></i></span>
                     <span class="scheme-section-title">${m.title}</span>
@@ -566,10 +558,17 @@ function parseSchemeBody(body) {
     return html;
 }
 
-function toggleSchemeAccordion(id) {
-    const item = document.getElementById(id);
-    const isOpen = item.classList.contains('open');
-    item.classList.toggle('open', !isOpen);
+function toggleSchemeAccordion(el) {
+    // el can be a button element (from onclick="toggleSchemeAccordion(this)")
+    // or a string ID (legacy fallback)
+    let item;
+    if (typeof el === 'string') {
+        item = document.getElementById(el);
+    } else {
+        item = el.closest('.scheme-accordion-item');
+    }
+    if (!item) return;
+    item.classList.toggle('open');
 }
 
 function escapeHtml(text) {

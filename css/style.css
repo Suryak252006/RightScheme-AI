@@ -123,102 +123,7 @@ body {
     pointer-events: none;
 }
 
-/* Lock Design */
-.lock-container {
-    position: relative;
-    margin-bottom: 40px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.lock-container:hover {
-    transform: scale(1.05);
-}
-
-.lock-box {
-    position: relative;
-    z-index: 2;
-}
-
-.lock-top {
-    display: flex;
-    justify-content: center;
-}
-
-.lock-shackle {
-    width: 80px;
-    height: 50px;
-    border: 6px solid var(--accent);
-    border-bottom: none;
-    border-radius: 40px 40px 0 0;
-    position: relative;
-    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-}
-
-.lock-shackle.unlocked {
-    transform: translateY(-10px) rotate(-30deg);
-    transform-origin: bottom right;
-}
-
-.lock-body {
-    width: 120px;
-    height: 100px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-light));
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    box-shadow: 0 10px 30px rgba(232, 163, 23, 0.3);
-}
-
-.keyhole {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.keyhole-circle {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--primary);
-}
-
-.keyhole-triangle {
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 14px solid var(--primary);
-    margin-top: -2px;
-}
-
-.lock-text {
-    font-size: 0.6rem;
-    font-weight: 600;
-    color: var(--primary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.lock-glow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(232,163,23,0.2) 0%, transparent 70%);
-    border-radius: 50%;
-    animation: pulse-glow 2s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-}
+/* Lock styles are in landing.css */
 
 .hero-title {
     color: white;
@@ -228,12 +133,7 @@ body {
     margin-bottom: 16px;
 }
 
-.hero-title span {
-    background: linear-gradient(135deg, var(--accent), var(--accent-light));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
+/* .hero-title span gradient moved to landing.css (.title-highlight) */
 
 .hero-subtitle {
     color: rgba(255,255,255,0.6);
@@ -325,57 +225,11 @@ body {
     margin: 0 auto;
 }
 
-.steps-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
+/* .steps-container layout defined in landing.css */
 
-.step {
-    text-align: center;
-    padding: 30px;
-}
+/* Old .step styles removed — replaced by .step-card in landing.css */
 
-.step-number {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-light));
-    color: var(--primary);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0 auto 16px;
-}
-
-.step h3 {
-    color: white;
-    font-size: 1.1rem;
-    margin-bottom: 8px;
-}
-
-.step p {
-    color: rgba(255,255,255,0.5);
-    font-size: 0.9rem;
-}
-
-.step-arrow {
-    color: var(--accent);
-    font-size: 1.5rem;
-}
-
-/* Footer */
-.landing-footer {
-    text-align: center;
-    padding: 30px;
-    color: rgba(255,255,255,0.3);
-    font-size: 0.85rem;
-    border-top: 1px solid rgba(255,255,255,0.05);
-}
+/* .landing-footer styles in landing.css */
 
 /* ========================================
    APP PAGE (Selector + Smart Search)
@@ -833,55 +687,7 @@ body {
     gap: 16px;
 }
 
-.scheme-card {
-    background: white;
-    border-radius: var(--radius-md);
-    padding: 24px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-sm);
-    transition: all 0.3s ease;
-}
-
-.scheme-card:hover {
-    box-shadow: var(--shadow-md);
-    border-color: var(--primary-lighter);
-}
-
-.scheme-card h3 {
-    font-size: 1.1rem;
-    color: var(--primary);
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.scheme-card h3::before {
-    content: '🏛️';
-}
-
-.scheme-card p {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    line-height: 1.7;
-    margin-bottom: 8px;
-}
-
-.scheme-card .scheme-tags {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 12px;
-}
-
-.scheme-tag {
-    padding: 4px 12px;
-    background: rgba(26, 54, 93, 0.06);
-    color: var(--primary);
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
+/* Old .scheme-card removed — using .scheme-accordion instead */
 
 /* ========================================
    SMART SEARCH / CHAT
@@ -1202,9 +1008,7 @@ body {
         flex-direction: column;
     }
 
-    .step-arrow {
-        transform: rotate(90deg);
-    }
+    /* .step-arrow removed — using .step-connector from landing.css */
 
     .app-nav {
         flex-direction: column;
@@ -1296,26 +1100,29 @@ body {
 .scheme-accordion {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 .scheme-accordion-item {
     background: white;
     border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
     border-radius: var(--radius-md);
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: var(--shadow-sm);
 }
 
 .scheme-accordion-item:hover {
     border-color: var(--primary-lighter);
+    border-left-color: var(--accent);
     box-shadow: var(--shadow-md);
 }
 
 .scheme-accordion-item.open {
     border-color: var(--primary-lighter);
-    box-shadow: 0 4px 20px rgba(26, 54, 93, 0.12);
+    border-left-color: var(--accent);
+    box-shadow: 0 4px 24px rgba(26, 54, 93, 0.14);
 }
 
 .scheme-accordion-header {
@@ -1383,12 +1190,14 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 20px;
-    font-size: 0.72rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 700;
     white-space: nowrap;
     flex-shrink: 0;
+    letter-spacing: 0.02em;
+    transition: all 0.3s ease;
 }
 
 .scheme-match-badge i {
@@ -1396,18 +1205,21 @@ body {
 }
 
 .scheme-match-badge.high {
-    background: rgba(56, 161, 105, 0.1);
-    color: #276749;
+    background: linear-gradient(135deg, rgba(56, 161, 105, 0.12), rgba(56, 161, 105, 0.06));
+    color: #22543d;
+    border: 1px solid rgba(56, 161, 105, 0.2);
 }
 
 .scheme-match-badge.medium {
-    background: rgba(237, 137, 54, 0.1);
-    color: #c05621;
+    background: linear-gradient(135deg, rgba(237, 137, 54, 0.12), rgba(237, 137, 54, 0.06));
+    color: #9c4221;
+    border: 1px solid rgba(237, 137, 54, 0.2);
 }
 
 .scheme-match-badge.low {
-    background: rgba(229, 62, 62, 0.1);
-    color: #c53030;
+    background: linear-gradient(135deg, rgba(229, 62, 62, 0.12), rgba(229, 62, 62, 0.06));
+    color: #9b2c2c;
+    border: 1px solid rgba(229, 62, 62, 0.2);
 }
 
 /* ---- Accordion Body ---- */
@@ -1445,8 +1257,13 @@ body {
     border-left: 3px solid var(--border);
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     background: #fafbfc;
-    padding: 12px 14px;
+    padding: 14px 16px;
     margin-bottom: 10px;
+    transition: all 0.25s ease;
+}
+
+.scheme-section:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .scheme-section:last-child {
